@@ -13,8 +13,29 @@ class Flag {
 
   Flag();
 
-  void reset({bool wumpus = false; bool wumpusDead = false, bool deadBody = false, bool breeze = false, bool stench = false, bool sound = false, bool pit = false}) {
-    print('a');
+  void reset(
+      {bool wumpus = false,
+      bool wumpusDead = false,
+      bool deadBody = false,
+      bool breeze = false,
+      bool stench = false,
+      bool sound = false,
+      bool pit = false,
+      bool goal = false,
+      bool startMove = false,
+      bool activeWumpus = false,
+      bool activeWumpusNear = false}) {
+    this.meetWumpus = wumpus;
+    this.meetWumpusDead = wumpusDead;
+    this.meetDeadBody = deadBody;
+    this.meetBreeze = breeze;
+    this.meetStench = stench;
+    this.meetSound = sound;
+    this.meetPit = pit;
+    this.meetGoal = goal;
+    this.meetStartToMove = startMove;
+    this.activeWumpus = activeWumpus;
+    this.activeWumpusNear = activeWumpusNear;
   }
 
   String getSituationPlayer() {
@@ -30,7 +51,7 @@ class Flag {
 
     if (this.meetDeadBody) {
       if (res != '') res = res + '\n';
-      res = res + 'Erhh! A dead body of a huge monster!';
+      res = res + 'Erhh! A dead body of a monster!';
     }
 
     if (!(this.meetDeadBody || this.meetWumpusDead)) {
@@ -64,7 +85,7 @@ class Flag {
 
     if (this.meetStartToMove) {
       if (res != '') res = res + '\n';
-      res = res + 'Something is start to move!';
+      res = res + 'Something has just started to move!';
     }
 
     return res;
@@ -81,14 +102,15 @@ class Flag {
 
     if (this.activeWumpus && !this.activeWumpusNear) {
       if (res != '') res = res + '\n';
-      res = res +
-          'Something is moving around. The ground is shaking a little.';
+      res = res + 'Something is moving around. The ground is shaking a little.';
     }
 
     if (this.activeWumpusNear) {
       if (res != '') res = res + '\n';
-      res = res +
-          'Something big must be near! The ground is shaking violently!';
+      res =
+          res + 'Something big must be near! The ground is shaking violently!';
     }
+
+    return res;
   }
 }

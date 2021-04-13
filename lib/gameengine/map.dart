@@ -226,8 +226,8 @@ class GameMap {
   }
 }
 
-void main() {
-  GameMap a = GameMap.randommap(size: 10, numOfPits: 30);
-  for (int i = 0; i < a.map.length; i++) print(a.map[i]);
-  return;
-}
+// void main() {
+//   GameMap a = GameMap.randommap(size: 10, numOfPits: 30);
+//   for (int i = 0; i < a.map.length; i++) print(a.map[i]);
+//   return;
+// }

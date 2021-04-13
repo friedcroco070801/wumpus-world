@@ -96,7 +96,7 @@ class Node {
     Node temp = this;
     while (temp != null) {
       path.add(temp);
-      print(temp.current);
+      //print(temp.current);
       temp = temp.parent;
     }
     return path;
@@ -134,9 +134,9 @@ class PathFinding {
 
       if (temp.isGoal()) {
         this.path = temp.getPath();
-        for (Node point in this.path) {
-          print(point.current);
-        }
+        // for (Node point in this.path) {
+        //   print(point.current);
+        // }
         return true;
       }
 
