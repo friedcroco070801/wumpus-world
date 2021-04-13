@@ -38,7 +38,12 @@ class AnimatedText extends StatelessWidget {
         child: Text(
           this.text,
           style: TextStyle(
-              color: Colors.white, fontSize: 12.0, fontFamily: 'YumenoMori'),
+              color: Colors.white,
+              fontSize: MediaQuery.of(context).size.height >
+                      MediaQuery.of(context).size.width
+                  ? MediaQuery.of(context).size.height / 40
+                  : MediaQuery.of(context).size.width / 40,
+              fontFamily: 'YumenoMori'),
           textAlign: TextAlign.center,
         ),
       );

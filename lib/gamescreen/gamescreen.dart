@@ -40,7 +40,8 @@ class GameScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   testText.animateUntil(
-                      fulltext: 'I love you baby, untillity the earth falls');
+                      fulltext:
+                          'Some rocks are falling from ceiling! The lound voice resounds.\nA gentle breeze...\nIt smells so bad!');
                 },
                 child: Container(
                   height: heightBox,
