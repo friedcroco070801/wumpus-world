@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
+import 'package:wumpus_world/gamescreen/controller.dart';
 import 'package:wumpus_world/gamescreen/notifybox.dart';
 
 class GameScreen extends StatelessWidget {
+  AnimatedText testText = AnimatedText();
+
   @override
   Widget build(BuildContext context) {
     return OrientationBuilder(builder: (_, orientation) {
@@ -19,7 +22,6 @@ class GameScreen extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double heightBox = height - width;
     double widthBox = width / 2;
-    AnimatedText testText = AnimatedText();
     return Container(
       color: GameColor.ONYX,
       child: Column(
@@ -36,19 +38,9 @@ class GameScreen extends StatelessWidget {
           Row(
             children: [
               NotifyBox(widthBox, heightBox,
-                  MediaQuery.of(context).size.width / 40, testText),
-              GestureDetector(
-                onTap: () {
-                  testText.animateUntil(
-                      fulltext:
-                          'Some rocks are falling from ceiling! The lound voice resounds.\nA gentle breeze...\nIt smells so bad!');
-                },
-                child: Container(
-                  height: heightBox,
-                  width: widthBox,
-                  color: GameColor.TEAL,
-                ),
-              ),
+                  MediaQuery.of(context).size.width / 40, testText, 'portrait'),
+              Controller(widthBox, heightBox,
+                  MediaQuery.of(context).size.width / 40, 'portrait')
             ],
           )
         ],
@@ -62,7 +54,6 @@ class GameScreen extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double widthBox = width - height;
     double heightBox = height / 2;
-    AnimatedText testText = AnimatedText();
     return Container(
       color: GameColor.ONYX,
       child: Column(
@@ -80,17 +71,14 @@ class GameScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  NotifyBox(widthBox, heightBox, height / 40, testText),
+                  NotifyBox(
+                      widthBox, heightBox, height / 40, testText, 'landscape'),
                   // Container(
                   //   height: heightBox,
                   //   width: widthBox,
                   //   color: GameColor.BLUE,
                   // ),
-                  Container(
-                    height: heightBox,
-                    width: widthBox,
-                    color: GameColor.TEAL,
-                  )
+                  Controller(widthBox, heightBox, height / 40, 'landscape')
                 ],
               )
             ],
