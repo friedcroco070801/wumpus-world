@@ -84,6 +84,7 @@ class Player extends Character {
       throw ("Invalid direction");
     this.pos = newPos;
     this._triggerEventOnMove();
+    this._setVisitedMap();
     return newPos;
   }
 
@@ -130,6 +131,29 @@ class Player extends Character {
         breeze: meetBreeze,
         stench: meetStench,
         startMove: startToMove);
+  }
+
+  void _setVisitedMap() {
+    this.map.visitedMap[pos[0]][pos[1]] = [];
+    if (this.flag.meetWumpus)
+      this.map.visitedMap[pos[0]][pos[1]].add('Wumpus');
+    else if (this.flag.meetPit)
+      this.map.visitedMap[pos[0]][pos[1]].add('Pit');
+    else {
+      if (this.flag.meetBreeze)
+        this.map.visitedMap[pos[0]][pos[1]].add('Breeze');
+      if (this.flag.meetStench)
+        this.map.visitedMap[pos[0]][pos[1]].add('Stench');
+      if (this.map.visitedMap[pos[0]][pos[1]].length == 0)
+        this.map.visitedMap[pos[0]][pos[1]].add('Empty');
+      this.map.visitedMap[pos[0]][pos[1]].add('Base');
+      if (this.flag.meetDeadBody)
+        this.map.visitedMap[pos[0]][pos[1]].add('DeadBody');
+      if (this.flag.meetWumpusDead)
+        this.map.visitedMap[pos[0]][pos[1]].add('WumpusDead');
+      if (this.flag.meetSound) this.map.visitedMap[pos[0]][pos[1]].add('Sound');
+      if (this.flag.meetGoal) this.map.visitedMap[pos[0]][pos[1]].add('Goal');
+    }
   }
 }
 

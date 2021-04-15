@@ -44,6 +44,10 @@ class Flag {
       return 'I-I have never see any monsters this huge!';
     }
 
+    if (this.meetPit) {
+      return 'Aaaargh!!!';
+    }
+
     if (this.meetWumpusDead) {
       if (res != '') res = res + '\n';
       res = res + 'Erhh! A dead body of a huge monster!';
@@ -70,11 +74,6 @@ class Flag {
       if (res != '') res = res + '\n';
       res = res +
           'Some rocks are falling from ceiling! The lound voice resounds.';
-    }
-
-    if (this.meetPit) {
-      if (res != '') res = res + '\n';
-      res = res + 'Aaaargh!!!';
     }
 
     if (this.meetGoal) {

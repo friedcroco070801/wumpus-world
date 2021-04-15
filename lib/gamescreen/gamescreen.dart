@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wumpus_world/gameengine/map.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
 import 'package:wumpus_world/gamescreen/controller.dart';
+import 'package:wumpus_world/gamescreen/mapblock.dart';
 import 'package:wumpus_world/gamescreen/notifybox.dart';
 
 class GameScreen extends StatelessWidget {
@@ -31,9 +33,9 @@ class GameScreen extends StatelessWidget {
             color: GameColor.ONYX,
           ),
           Container(
-            height: width,
-            width: width,
-            color: GameColor.RED,
+            margin: EdgeInsets.all(width / 40),
+            child: MapBlock(
+                width - width / 20, GameMap.randommap(size: 8, numOfPits: 10)),
           ),
           Row(
             children: [
@@ -65,19 +67,14 @@ class GameScreen extends StatelessWidget {
           Row(
             children: [
               Container(
-                height: height,
-                width: height,
-                color: GameColor.RED,
+                margin: EdgeInsets.all(height / 40),
+                child: MapBlock(height - height / 20,
+                    GameMap.randommap(size: 8, numOfPits: 10)),
               ),
               Column(
                 children: [
                   NotifyBox(
                       widthBox, heightBox, height / 40, testText, 'landscape'),
-                  // Container(
-                  //   height: heightBox,
-                  //   width: widthBox,
-                  //   color: GameColor.BLUE,
-                  // ),
                   Controller(widthBox, heightBox, height / 40, 'landscape')
                 ],
               )

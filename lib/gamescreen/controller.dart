@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:wumpus_world/customwidget.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
@@ -189,10 +191,10 @@ class ActionButton extends StatelessWidget {
   ActionButton(this.width, this.height, this.margin) {
     if (width > height) {
       buttonSize =
-          ((width - margin) / 2 > height) ? height : (width - margin) / 2;
+          min(min((width - margin) / 2, height), (width - 2 * margin) / 3);
     } else {
       buttonSize =
-          ((height - margin) / 2 > width) ? width : (height - margin) / 2;
+          min(min((height - margin) / 2, width), (height - 2 * margin) / 3);
     }
   }
 
