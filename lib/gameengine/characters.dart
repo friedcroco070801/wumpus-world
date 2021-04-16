@@ -14,30 +14,6 @@ class Character {
     this.flag = flag;
   }
 
-  bool canMove({String dir}) {
-    List<int> newPos = [0, 0];
-    if (dir == 'u') {
-      newPos = [pos[0] - 1, pos[1]];
-    } else if (dir == 'd') {
-      newPos = [pos[0] + 1, pos[1]];
-    } else if (dir == 'l') {
-      newPos = [pos[0], pos[1] - 1];
-    } else if (dir == 'r') {
-      newPos = [pos[0], pos[1] + 1];
-    } else
-      throw ("Invalid direction");
-
-    if (newPos[0] < 0 ||
-        newPos[0] >= this.map.size ||
-        newPos[1] < 0 ||
-        newPos[1] >= this.map.size) {
-      return false;
-    } else if (this.map.isObstacle(newPos))
-      return false;
-    else
-      return true;
-  }
-
   bool _around(int check) {
     if (this.pos[0] > 0) if (this.map.map[this.pos[0] - 1][this.pos[1]] ==
         check) return true;
@@ -69,6 +45,40 @@ class Player extends Character {
     this.arrow = true;
   }
 
+  bool shootArrow(String dir) {
+    if (this.canMove(dir)) {
+      this.arrow = false;
+
+      List<int> newPos = [0, 0];
+      if (dir == 'u') {
+        newPos = [pos[0] - 1, pos[1]];
+      } else if (dir == 'd') {
+        newPos = [pos[0] + 1, pos[1]];
+      } else if (dir == 'l') {
+        newPos = [pos[0], pos[1] - 1];
+      } else if (dir == 'r') {
+        newPos = [pos[0], pos[1] + 1];
+      }
+
+      int cell = this.map.map[newPos[0]][newPos[1]];
+      if (cell == WUMPUS) {
+        this.map.map[newPos[0]][newPos[1]] = WUMPUSDEAD;
+        this.wumpus.active = false;
+        this.wumpus.alive = false;
+        this.flag.reset(hitSomething: true);
+        return true;
+      } else {
+        if (wumpus.active || !wumpus.alive)
+          this.flag.reset(hitNothing: true);
+        else {
+          this.flag.reset(hitNothing: true, startMove: true);
+          this.wumpus.active = true;
+        }
+      }
+    }
+    return false;
+  }
+
   @override
   List<int> move({String dir}) {
     List<int> newPos = [0, 0];
@@ -88,6 +98,26 @@ class Player extends Character {
     return newPos;
   }
 
+  bool canMove(String dir) {
+    List<int> newPos = [-1, -1];
+    if (dir == 'u') {
+      newPos = [pos[0] - 1, pos[1]];
+    } else if (dir == 'd') {
+      newPos = [pos[0] + 1, pos[1]];
+    } else if (dir == 'l') {
+      newPos = [pos[0], pos[1] - 1];
+    } else if (dir == 'r') {
+      newPos = [pos[0], pos[1] + 1];
+    }
+    if (newPos[0] < 0 ||
+        newPos[0] >= this.map.size ||
+        newPos[1] < 0 ||
+        newPos[1] >= this.map.size) {
+      return false;
+    } else
+      return true;
+  }
+
   void _triggerEventOnMove() {
     bool meetWumpus = false;
     bool meetWumpusDead = false;
@@ -105,7 +135,7 @@ class Player extends Character {
     if (this.map.map[this.pos[0]][this.pos[1]] == DEADBODY) meetDeadBody = true;
     if (this.map.map[this.pos[0]][this.pos[1]] == SOUND) {
       meetSound = true;
-      if (!this.wumpus.active) {
+      if (!this.wumpus.active && this.wumpus.alive) {
         this.wumpus.active = true;
         startToMove = true;
         this.map.map[this.pos[0]][this.pos[1]] = 0;
@@ -159,6 +189,7 @@ class Player extends Character {
 class Wumpus extends Character {
   Player player;
   int oldEvent;
+  bool alive;
 
   Wumpus({List<int> pos, GameMap map, Flag flag, Player player}) {
     this.pos = pos;
@@ -168,6 +199,7 @@ class Wumpus extends Character {
     this.active = false;
     this.player.wumpus = this;
     this.oldEvent = 0;
+    this.alive = true;
   }
 
   List<int> move() {
@@ -175,16 +207,19 @@ class Wumpus extends Character {
         PathFinding(map: this.map, start: this.pos, end: this.player.pos);
     pathFind.solve();
     List<Node> path = pathFind.path;
-    List<int> newPos = path[path.length - 2].current;
-    List<int> oldPos = this.pos;
-    this.pos = newPos;
-    this._triggerEventOnMove();
-    this.map.map[oldPos[0]][oldPos[1]] =
-        (this.oldEvent == SOUND ? 0 : this.oldEvent);
-    this.oldEvent = this.map.map[newPos[0]][newPos[1]];
-    this.map.map[newPos[0]][newPos[1]] = WUMPUS;
-    this.map.wumpusPos = newPos;
-    return newPos;
+    if (path.length >= 2) {
+      List<int> newPos = path[path.length - 2].current;
+      List<int> oldPos = this.pos;
+      this.pos = newPos;
+      this._triggerEventOnMove();
+      this.map.map[oldPos[0]][oldPos[1]] =
+          (this.oldEvent == SOUND ? 0 : this.oldEvent);
+      this.oldEvent = this.map.map[newPos[0]][newPos[1]];
+      this.map.map[newPos[0]][newPos[1]] = WUMPUS;
+      this.map.wumpusPos = newPos;
+      return newPos;
+    }
+    return [-1, -1];
   }
 
   void _triggerEventOnMove() {

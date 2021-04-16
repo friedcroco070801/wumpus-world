@@ -17,7 +17,11 @@ class Controller extends StatelessWidget {
   double directionWidthLand;
   double actionWidthLand;
 
-  Controller(this.width, this.height, this.margin, this.orientation) {
+  DirectionController directionController;
+  ActionButton actionButton;
+
+  Controller(this.width, this.height, this.margin, this.orientation,
+      this.directionController, this.actionButton) {
     directionHeight = this.width - 1.5 * this.margin;
     actionHeight = this.height - directionHeight - 2 * this.margin;
 
@@ -35,15 +39,22 @@ class Controller extends StatelessWidget {
             width: directionHeight,
             margin: EdgeInsets.fromLTRB(
                 this.margin / 2, 0.0, this.margin, this.margin),
-            child: ActionButton(directionHeight, actionHeight, margin),
+            child: () {
+              actionButton.setParameters(directionHeight, actionHeight, margin);
+              return actionButton;
+            }(),
           ),
           Container(
-              width: directionHeight,
-              height: directionHeight,
-              margin: EdgeInsets.fromLTRB(
-                  this.margin / 2, 0.0, this.margin, this.margin),
-              child: DirectionController(
-                  directionHeight, directionHeight, this.margin)),
+            width: directionHeight,
+            height: directionHeight,
+            margin: EdgeInsets.fromLTRB(
+                this.margin / 2, 0.0, this.margin, this.margin),
+            child: () {
+              directionController.setParameters(
+                  directionHeight, directionHeight, this.margin);
+              return directionController;
+            }(),
+          )
         ],
       );
     } else
@@ -53,15 +64,22 @@ class Controller extends StatelessWidget {
             height: directionWidthLand,
             width: actionWidthLand,
             margin: EdgeInsets.fromLTRB(0.0, this.margin / 2, 0.0, this.margin),
-            child: ActionButton(actionWidthLand, directionWidthLand, margin),
+            child: () {
+              actionButton.setParameters(
+                  actionWidthLand, directionWidthLand, margin);
+              return actionButton;
+            }(),
           ),
           Container(
             width: directionWidthLand,
             height: directionWidthLand,
             margin: EdgeInsets.fromLTRB(
                 this.margin, this.margin / 2, this.margin, this.margin),
-            child: DirectionController(
-                directionWidthLand, directionWidthLand, this.margin),
+            child: () {
+              directionController.setParameters(
+                  directionWidthLand, directionWidthLand, this.margin);
+              return directionController;
+            }(),
           )
         ],
       );
@@ -74,8 +92,16 @@ class DirectionController extends StatelessWidget {
   double margin;
   double boxSize;
   void Function(void Function()) update;
+  void Function(String) move;
 
-  DirectionController(this.width, this.height, this.margin) {
+  DirectionController(this.width, this.height, this.margin, this.move) {
+    this.boxSize = (this.width - 2 * this.margin) / 3;
+  }
+
+  void setParameters(double width, double height, double margin) {
+    this.width = width;
+    this.height = height;
+    this.margin = margin;
     this.boxSize = (this.width - 2 * this.margin) / 3;
   }
 
@@ -100,7 +126,7 @@ class DirectionController extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    MapBlock.player.move(dir: 'u');
+                    move('u');
                   },
                 ),
                 SizedBox(width: boxSize + margin),
@@ -122,7 +148,7 @@ class DirectionController extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    MapBlock.player.move(dir: 'l');
+                    move('l');
                   },
                 ),
                 SizedBox(
@@ -154,7 +180,7 @@ class DirectionController extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    MapBlock.player.move(dir: 'r');
+                    move('r');
                   },
                 ),
               ],
@@ -176,7 +202,7 @@ class DirectionController extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    MapBlock.player.vanish();
+                    move('d');
                   },
                 ),
                 SizedBox(width: boxSize + margin),
@@ -197,7 +223,86 @@ class ActionButton extends StatelessWidget {
   double buttonSize;
   void Function(void Function()) update;
 
+  void showReturnDialog(BuildContext context) {
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+        //Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      backgroundColor: GameColor.ONYX,
+      title: Text(
+        'Do you really want to quit?',
+        style: TextStyle(color: Colors.white, fontFamily: 'RainyHearts'),
+        textAlign: TextAlign.center,
+      ),
+      content: Text(
+        'All the changed cannot be saved until the end of the level. Quit anyway?',
+        style: TextStyle(color: Colors.white, fontFamily: 'RainyHearts'),
+        textAlign: TextAlign.center,
+      ),
+      actions: [okButton, cancelButton],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  String showArrowDialog(BuildContext context) {
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      backgroundColor: GameColor.ONYX,
+      title: Text(
+        'Choose the direction to shoot the arrow.',
+        style: TextStyle(color: Colors.white, fontFamily: 'RainyHearts'),
+        textAlign: TextAlign.center,
+      ),
+      content: Text('Temporary'),
+      actions: [cancelButton],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   ActionButton(this.width, this.height, this.margin) {
+    if (width > height) {
+      buttonSize =
+          min(min((width - margin) / 2, height), (width - 2 * margin) / 3);
+    } else {
+      buttonSize =
+          min(min((height - margin) / 2, width), (height - 2 * margin) / 3);
+    }
+  }
+
+  void setParameters(double width, double height, double margin) {
+    this.width = width;
+    this.height = height;
+    this.margin = margin;
     if (width > height) {
       buttonSize =
           min(min((width - margin) / 2, height), (width - 2 * margin) / 3);
@@ -210,7 +315,9 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GestureDetector backButton = GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showReturnDialog(context);
+      },
       child: Container(
         width: buttonSize,
         height: buttonSize,
@@ -222,7 +329,9 @@ class ActionButton extends StatelessWidget {
       ),
     );
     GestureDetector arrowButton = GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showArrowDialog(context);
+      },
       child: Container(
         width: buttonSize,
         height: buttonSize,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -11,9 +12,16 @@ class MapBlock extends StatelessWidget {
   int size;
   GameMap map;
   void Function(void Function()) update;
-  static PlayerCell player;
+  PlayerCell player;
 
-  MapBlock(this.width, this.map) {
+  MapBlock(this.width, this.map, this.player) {
+    this.size = map.size;
+    this.margin = (width / 7) / size;
+    this.widthCell = (width - margin * (size - 1)) / size;
+  }
+
+  void setParameters(double width) {
+    this.width = width;
     this.size = map.size;
     this.margin = (width / 7) / size;
     this.widthCell = (width - margin * (size - 1)) / size;
@@ -21,8 +29,6 @@ class MapBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //player = null;
-    if (player == null) player = PlayerCell(size, 7, 7);
     return CustomStatefulBuilder(
       builder: (context, StateSetter setState) {
         this.update = setState;
@@ -71,6 +77,12 @@ class MapCell extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> stackChildren = [];
     double curWidth = width;
+    stackChildren.add(Container(
+      width: curWidth,
+      height: curWidth,
+      color: Colors.black,
+    ));
+
     for (String item in this.map.visitedMap[row][col]) {
       if (item == 'Breeze') {
         stackChildren.add(Container(
@@ -147,16 +159,18 @@ class PlayerCell extends StatelessWidget {
   int row, col, size;
   double widthCell, margin;
   double widthBox;
-  void Function(void Function()) update;
+  void Function(void Function(), {String image}) update;
   Timer timer;
   bool moving;
   bool vanished;
   double angle;
+  String image;
 
   PlayerCell(this.size, this.row, this.col) {
     this.moving = false;
     this.vanished = false;
     this.angle = 0;
+    this.image = 'assets/images/Player.png';
   }
 
   @override
@@ -182,8 +196,12 @@ class PlayerCell extends StatelessWidget {
     }
 
     return CustomStatefulBuilder(builder: (context, StateSetter setState) {
-      this.update = setState;
-      return (this.vanished && !this.moving)
+      this.update = (void Function() setWut,
+          {String image = 'assets/images/Player.png'}) {
+        this.image = image;
+        setState(setWut);
+      };
+      return (this.vanished)
           ? Container()
           : Positioned(
               left: left,
@@ -197,7 +215,7 @@ class PlayerCell extends StatelessWidget {
                   alignment: Alignment.center,
                   angle: this.angle,
                   child: Image.asset(
-                    'assets/images/Player.png',
+                    image,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -208,7 +226,7 @@ class PlayerCell extends StatelessWidget {
     });
   }
 
-  void move({String dir, int speed = 5}) {
+  void move({String dir, int speed = 10}) {
     this.moving = true;
     this.upBase = this.up;
     this.leftBase = this.left;
@@ -227,18 +245,29 @@ class PlayerCell extends StatelessWidget {
         this.widthCell / 2 + row * (this.widthCell + this.margin);
     this.leftBase = horizonalCen - widthCell * 3 / 8;
     this.upBase = verticalCen - widthCell * 3 / 8;
-    double speedup = (upBase - up) / 40;
-    double speedleft = (leftBase - left) / 40;
+    double speedup = (upBase - up) / 20;
+    double speedleft = (leftBase - left) / 20;
+    int count = 0;
+
     this.timer = Timer.periodic(Duration(milliseconds: speed), (timer) {
+      this.timer = timer;
       if (this.left != this.leftBase) this.left += speedleft;
       if (this.up != this.upBase) this.up += speedup;
-      this.update(() {});
+      this.update(() {}, image: () {
+        int temp = count ~/ 5;
+        String tempString = ((temp > 3) ? '3' : temp.toString());
+        return ('assets/images/Player' + dir + tempString + '.png');
+      }());
+      count += 1;
       if ((this.left <= this.leftBase && dir == 'l') ||
           (this.left >= this.leftBase && dir == 'r') ||
           (this.up >= this.upBase && dir == 'd') ||
-          (this.up <= this.upBase && dir == 'u')) timer.cancel();
+          (this.up <= this.upBase && dir == 'u')) {
+        timer.cancel();
+        this.update(() {});
+        this.moving = false;
+      }
     });
-    this.moving = false;
   }
 
   void vanish({int speed = 40}) {
@@ -248,6 +277,7 @@ class PlayerCell extends StatelessWidget {
     double vanishSizeSpeed = widthCell / 10;
 
     this.timer = Timer.periodic(Duration(milliseconds: speed), (timer) {
+      this.timer = timer;
       this.left += vanishSpeed;
       this.up += vanishSpeed;
       if (widthCell - vanishSizeSpeed > 0) this.widthCell -= vanishSizeSpeed;
@@ -260,5 +290,25 @@ class PlayerCell extends StatelessWidget {
     });
 
     this.moving = false;
+  }
+
+  void shootArrow({String dir}) {
+    this.update(() {}, image: ('assets/images/PlayerArrow' + dir + '0.png'));
+    Timer(Duration(milliseconds: 500), () {
+      this.update(() {}, image: ('assets/images/PlayerArrow' + dir + '1.png'));
+      Timer(Duration(milliseconds: 500), () {
+        this.update(() {},
+            image: ('assets/images/PlayerArrow' + dir + '2.png'));
+        Timer(Duration(milliseconds: 1000), () {
+          this.update(() {},
+              image: ('assets/images/PlayerArrow' + dir + '3.png'));
+          Timer(Duration(milliseconds: 1000), () {
+            this.update(() {}, image: ('assets/images/Player.png'));
+          });
+        });
+      });
+    });
+
+    //this.update(() {});
   }
 }

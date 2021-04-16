@@ -8,6 +8,8 @@ class Flag {
   bool meetPit = false;
   bool meetGoal = false;
   bool meetStartToMove = false;
+  bool meetHitNothing = false;
+  bool meetHitSomething = false;
   bool activeWumpus = false;
   bool activeWumpusNear = false;
 
@@ -23,6 +25,8 @@ class Flag {
       bool pit = false,
       bool goal = false,
       bool startMove = false,
+      bool hitNothing = false,
+      bool hitSomething = false,
       bool activeWumpus = false,
       bool activeWumpusNear = false}) {
     this.meetWumpus = wumpus;
@@ -34,6 +38,7 @@ class Flag {
     this.meetPit = pit;
     this.meetGoal = goal;
     this.meetStartToMove = startMove;
+    this.meetHitNothing = hitNothing;
     this.activeWumpus = activeWumpus;
     this.activeWumpusNear = activeWumpusNear;
   }
@@ -80,6 +85,16 @@ class Flag {
       if (res != '') res = res + '\n';
       res = res +
           'Woah! The treasure is shining! Better take it and return to the initial point.';
+    }
+
+    if (this.meetHitNothing) {
+      if (res != '') res = res + '\n';
+      res = res + 'The arrow does not hit anything.';
+    }
+
+    if (this.meetHitSomething) {
+      if (res != '') res = res + '\n';
+      res = res + 'The arrow hits something!';
     }
 
     if (this.meetStartToMove) {

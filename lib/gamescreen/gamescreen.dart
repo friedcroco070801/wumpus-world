@@ -7,7 +7,14 @@ import 'package:wumpus_world/gamescreen/mapblock.dart';
 import 'package:wumpus_world/gamescreen/notifybox.dart';
 
 class GameScreen extends StatelessWidget {
-  AnimatedText testText = AnimatedText();
+  AnimatedText animatedText;
+  DirectionController directionController;
+  ActionButton actionButton;
+  MapBlock mapBlock;
+  PlayerCell playerCell;
+
+  GameScreen(this.animatedText, this.directionController, this.actionButton,
+      this.playerCell, this.mapBlock);
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +44,26 @@ class GameScreen extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.all(width / 40),
-            child: MapBlock(
-                width - width / 20, GameMap.randommap(size: 8, numOfPits: 10)),
+            child: () {
+              this.mapBlock.setParameters(width - width / 20);
+              return this.mapBlock;
+            }(),
           ),
           Row(
             children: [
-              NotifyBox(widthBox, heightBox,
-                  MediaQuery.of(context).size.width / 40, testText, 'portrait'),
-              Controller(widthBox, heightBox,
-                  MediaQuery.of(context).size.width / 40, 'portrait')
+              NotifyBox(
+                  widthBox,
+                  heightBox,
+                  MediaQuery.of(context).size.width / 40,
+                  animatedText,
+                  'portrait'),
+              Controller(
+                  widthBox,
+                  heightBox,
+                  MediaQuery.of(context).size.width / 40,
+                  'portrait',
+                  directionController,
+                  actionButton)
             ],
           )
         ],
@@ -71,14 +89,17 @@ class GameScreen extends StatelessWidget {
             children: [
               Container(
                 margin: EdgeInsets.all(height / 40),
-                child: MapBlock(height - height / 20,
-                    GameMap.randommap(size: 8, numOfPits: 10)),
+                child: () {
+                  this.mapBlock.setParameters(height - height / 20);
+                  return this.mapBlock;
+                }(),
               ),
               Column(
                 children: [
-                  NotifyBox(
-                      widthBox, heightBox, height / 40, testText, 'landscape'),
-                  Controller(widthBox, heightBox, height / 40, 'landscape')
+                  NotifyBox(widthBox, heightBox, height / 40, animatedText,
+                      'landscape'),
+                  Controller(widthBox, heightBox, height / 40, 'landscape',
+                      directionController, actionButton)
                 ],
               )
             ],

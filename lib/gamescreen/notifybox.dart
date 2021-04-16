@@ -50,7 +50,7 @@ class AnimatedText extends StatelessWidget {
         return Material(
           type: MaterialType.transparency,
           child: Text(
-            'Some rocks are falling from the ceiling. The loud sound resounds.\nA gentle breeze...\nIt smells so bad.',
+            this.text,
             style: TextStyle(
                 color: Colors.white,
                 fontSize: MediaQuery.of(context).size.height >
