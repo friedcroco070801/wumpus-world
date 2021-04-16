@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wumpus_world/gameengine/map.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
 import 'package:wumpus_world/gamescreen/controller.dart';
@@ -10,6 +11,8 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     return OrientationBuilder(builder: (_, orientation) {
       if (orientation == Orientation.portrait)
         return _portraitGameScreen(context);

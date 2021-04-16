@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:wumpus_world/customwidget.dart';
@@ -20,6 +21,7 @@ class MapBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //player = null;
     if (player == null) player = PlayerCell(size, 7, 7);
     return CustomStatefulBuilder(
       builder: (context, StateSetter setState) {
@@ -148,9 +150,13 @@ class PlayerCell extends StatelessWidget {
   void Function(void Function()) update;
   Timer timer;
   bool moving;
+  bool vanished;
+  double angle;
 
   PlayerCell(this.size, this.row, this.col) {
     this.moving = false;
+    this.vanished = false;
+    this.angle = 0;
   }
 
   @override
@@ -177,26 +183,32 @@ class PlayerCell extends StatelessWidget {
 
     return CustomStatefulBuilder(builder: (context, StateSetter setState) {
       this.update = setState;
-      return Positioned(
-          left: left,
-          width: widthCell * 3 / 4,
-          top: up,
-          height: widthCell * 3 / 4,
-          child: Container(
-            width: widthCell * 3 / 4,
-            height: widthCell * 3 / 4,
-            child: Image.asset(
-              'assets/images/Player.png',
-              fit: BoxFit.contain,
-            ),
-          ));
+      return (this.vanished && !this.moving)
+          ? Container()
+          : Positioned(
+              left: left,
+              width: widthCell * 3 / 4,
+              top: up,
+              height: widthCell * 3 / 4,
+              child: Container(
+                width: widthCell * 3 / 4,
+                height: widthCell * 3 / 4,
+                child: Transform.rotate(
+                  alignment: Alignment.center,
+                  angle: this.angle,
+                  child: Image.asset(
+                    'assets/images/Player.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ));
     }, dispose: () {
       this.timer?.cancel();
       this.moving = false;
     });
   }
 
-  void move({String dir, int speed = 10}) {
+  void move({String dir, int speed = 5}) {
     this.moving = true;
     this.upBase = this.up;
     this.leftBase = this.left;
@@ -215,8 +227,8 @@ class PlayerCell extends StatelessWidget {
         this.widthCell / 2 + row * (this.widthCell + this.margin);
     this.leftBase = horizonalCen - widthCell * 3 / 8;
     this.upBase = verticalCen - widthCell * 3 / 8;
-    double speedup = (upBase - up) / 20;
-    double speedleft = (leftBase - left) / 20;
+    double speedup = (upBase - up) / 40;
+    double speedleft = (leftBase - left) / 40;
     this.timer = Timer.periodic(Duration(milliseconds: speed), (timer) {
       if (this.left != this.leftBase) this.left += speedleft;
       if (this.up != this.upBase) this.up += speedup;
@@ -226,6 +238,27 @@ class PlayerCell extends StatelessWidget {
           (this.up >= this.upBase && dir == 'd') ||
           (this.up <= this.upBase && dir == 'u')) timer.cancel();
     });
+    this.moving = false;
+  }
+
+  void vanish({int speed = 40}) {
+    this.moving = true;
+
+    double vanishSpeed = widthCell * 3 / 8 / 10;
+    double vanishSizeSpeed = widthCell / 10;
+
+    this.timer = Timer.periodic(Duration(milliseconds: speed), (timer) {
+      this.left += vanishSpeed;
+      this.up += vanishSpeed;
+      if (widthCell - vanishSizeSpeed > 0) this.widthCell -= vanishSizeSpeed;
+      this.angle += pi / 2;
+      this.update(() {});
+      if (widthCell - vanishSizeSpeed <= 0) {
+        timer.cancel();
+        this.vanished = true;
+      }
+    });
+
     this.moving = false;
   }
 }

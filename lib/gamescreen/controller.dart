@@ -176,7 +176,7 @@ class DirectionController extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    MapBlock.player.move(dir: 'd');
+                    MapBlock.player.vanish();
                   },
                 ),
                 SizedBox(width: boxSize + margin),
