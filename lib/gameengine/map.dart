@@ -94,8 +94,8 @@ class GameMap {
   GameMap.premap({List<List<int>> map}) {
     this.map = map;
     this.size = this.map.length;
-    this.visitedMap =
-        List.generate(size, (index) => List.generate(size, (index) => []));
+    this.visitedMap = List.generate(
+        size, (index) => List.generate(size, (index) => ['Empty']));
     for (int i = 0; i < this.size; i++) {
       for (int j = 0; j < this.size; j++) {
         if (this.map[i][j] == GOAL) this.goalPos = [i, j];
@@ -116,8 +116,8 @@ class GameMap {
         }
       }
     } while (!this._isHardEnough());
-    this.visitedMap =
-        List.generate(size, (index) => List.generate(size, (index) => []));
+    this.visitedMap = List.generate(
+        size, (index) => List.generate(size, (index) => ['Empty']));
   }
 
   bool isObstacle(List<int> pos) {

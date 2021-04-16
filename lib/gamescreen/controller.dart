@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:wumpus_world/customwidget.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
+import 'package:wumpus_world/gamescreen/mapblock.dart';
 
 class Controller extends StatelessWidget {
   double width;
@@ -98,7 +99,9 @@ class DirectionController extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    MapBlock.player.move(dir: 'u');
+                  },
                 ),
                 SizedBox(width: boxSize + margin),
               ],
@@ -118,7 +121,9 @@ class DirectionController extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    MapBlock.player.move(dir: 'l');
+                  },
                 ),
                 SizedBox(
                   width: this.margin,
@@ -148,7 +153,9 @@ class DirectionController extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    MapBlock.player.move(dir: 'r');
+                  },
                 ),
               ],
             ),
@@ -168,7 +175,9 @@ class DirectionController extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    MapBlock.player.move(dir: 'd');
+                  },
                 ),
                 SizedBox(width: boxSize + margin),
               ],
