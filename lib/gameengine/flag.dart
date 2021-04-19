@@ -114,7 +114,7 @@ class Flag {
           'Some rocks are falling from ceiling! The lound voice resounds.';
     }
 
-    if (this.activeWumpus && !this.activeWumpusNear) {
+    if (this.activeWumpus && !this.activeWumpusNear && !this.meetWumpus) {
       if (res != '') res = res + '\n';
       res = res + 'Something is moving around. The ground is shaking a little.';
     }
@@ -123,6 +123,11 @@ class Flag {
       if (res != '') res = res + '\n';
       res =
           res + 'Something big must be near! The ground is shaking violently!';
+    }
+
+    if (this.meetWumpus) {
+      if (res != '') res = res + '\n';
+      res = res + 'I-I have never see any monsters this huge!';
     }
 
     return res;

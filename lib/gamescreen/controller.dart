@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:wumpus_world/customwidget.dart';
+import 'package:wumpus_world/gameengine/characters.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
 import 'package:wumpus_world/gamescreen/mapblock.dart';
 
@@ -93,8 +94,10 @@ class DirectionController extends StatelessWidget {
   double boxSize;
   void Function(void Function()) update;
   void Function(String) move;
+  Player player;
 
-  DirectionController(this.width, this.height, this.margin, this.move) {
+  DirectionController(
+      this.width, this.height, this.margin, this.move, this.player) {
     this.boxSize = (this.width - 2 * this.margin) / 3;
   }
 
@@ -114,21 +117,28 @@ class DirectionController extends StatelessWidget {
           children: [
             Row(
               children: [
-                SizedBox(width: boxSize + margin),
-                GestureDetector(
-                  child: Container(
-                    width: boxSize,
-                    height: boxSize,
-                    color: Colors.black,
-                    child: Icon(
-                      Icons.arrow_drop_up,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {
-                    move('u');
-                  },
+                SizedBox(
+                  width: boxSize + margin,
+                  height: boxSize,
                 ),
+                player.canMove('u') && player.active
+                    ? GestureDetector(
+                        child: Container(
+                          width: boxSize,
+                          height: boxSize,
+                          color: Colors.black,
+                          child: Icon(
+                            Icons.arrow_drop_up,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onTap: () {
+                          move('u');
+                        },
+                      )
+                    : SizedBox(
+                        width: boxSize,
+                      ),
                 SizedBox(width: boxSize + margin),
               ],
             ),
@@ -137,52 +147,57 @@ class DirectionController extends StatelessWidget {
             ),
             Row(
               children: [
-                GestureDetector(
-                  child: Container(
-                    width: boxSize,
-                    height: boxSize,
-                    color: Colors.black,
-                    child: Icon(
-                      Icons.arrow_left,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {
-                    move('l');
-                  },
+                player.canMove('l') && player.active
+                    ? GestureDetector(
+                        child: Container(
+                          width: boxSize,
+                          height: boxSize,
+                          color: Colors.black,
+                          child: Icon(
+                            Icons.arrow_left,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onTap: () {
+                          move('l');
+                        },
+                      )
+                    : Container(
+                        width: boxSize,
+                      ),
+                SizedBox(
+                  width: this.margin,
+                  height: boxSize,
+                ),
+                MapCell(
+                  boxSize,
+                  player.map,
+                  player.pos[0],
+                  player.pos[1],
+                  player.wumpus,
+                  mode: 'Show',
                 ),
                 SizedBox(
                   width: this.margin,
                 ),
-                GestureDetector(
-                  child: Container(
-                    width: boxSize,
-                    height: boxSize,
-                    color: Colors.black,
-                    child: Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-                SizedBox(
-                  width: this.margin,
-                ),
-                GestureDetector(
-                  child: Container(
-                    width: boxSize,
-                    height: boxSize,
-                    color: Colors.black,
-                    child: Icon(
-                      Icons.arrow_right,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {
-                    move('r');
-                  },
-                ),
+                player.canMove('r') && player.active
+                    ? GestureDetector(
+                        child: Container(
+                          width: boxSize,
+                          height: boxSize,
+                          color: Colors.black,
+                          child: Icon(
+                            Icons.arrow_right,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onTap: () {
+                          move('r');
+                        },
+                      )
+                    : SizedBox(
+                        width: boxSize,
+                      ),
               ],
             ),
             SizedBox(
@@ -190,21 +205,28 @@ class DirectionController extends StatelessWidget {
             ),
             Row(
               children: [
-                SizedBox(width: boxSize + margin),
-                GestureDetector(
-                  child: Container(
-                    width: boxSize,
-                    height: boxSize,
-                    color: Colors.black,
-                    child: Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {
-                    move('d');
-                  },
+                SizedBox(
+                  width: boxSize + margin,
+                  height: boxSize,
                 ),
+                player.canMove('d') && player.active
+                    ? GestureDetector(
+                        child: Container(
+                          width: boxSize,
+                          height: boxSize,
+                          color: Colors.black,
+                          child: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onTap: () {
+                          move('d');
+                        },
+                      )
+                    : SizedBox(
+                        width: boxSize,
+                      ),
                 SizedBox(width: boxSize + margin),
               ],
             ),
@@ -222,6 +244,8 @@ class ActionButton extends StatelessWidget {
   double margin;
   double buttonSize;
   void Function(void Function()) update;
+  Player player;
+  void Function(String) arrowMove;
 
   void showReturnDialog(BuildContext context) {
     Widget cancelButton = TextButton(
@@ -277,7 +301,17 @@ class ActionButton extends StatelessWidget {
         style: TextStyle(color: Colors.white, fontFamily: 'RainyHearts'),
         textAlign: TextAlign.center,
       ),
-      content: Text('Temporary'),
+      content: SingleChildScrollView(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DirectionController(height, height, height / 21, (String dir) {
+              Navigator.of(context).pop();
+              arrowMove(dir);
+            }, player),
+          ],
+        ),
+      ),
       actions: [cancelButton],
     );
 
@@ -289,7 +323,8 @@ class ActionButton extends StatelessWidget {
     );
   }
 
-  ActionButton(this.width, this.height, this.margin) {
+  ActionButton(
+      this.width, this.height, this.margin, this.arrowMove, this.player) {
     if (width > height) {
       buttonSize =
           min(min((width - margin) / 2, height), (width - 2 * margin) / 3);
@@ -354,7 +389,9 @@ class ActionButton extends StatelessWidget {
                 SizedBox(
                   width: this.margin,
                 ),
-                arrowButton
+                player.active && player.arrow
+                    ? arrowButton
+                    : SizedBox(width: buttonSize, height: buttonSize)
               ],
             );
           else
@@ -366,7 +403,9 @@ class ActionButton extends StatelessWidget {
                 SizedBox(
                   height: this.margin,
                 ),
-                arrowButton
+                player.active && player.arrow
+                    ? arrowButton
+                    : SizedBox(width: buttonSize, height: buttonSize)
               ],
             );
         },

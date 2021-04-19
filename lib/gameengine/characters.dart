@@ -217,6 +217,7 @@ class Wumpus extends Character {
       this.oldEvent = this.map.map[newPos[0]][newPos[1]];
       this.map.map[newPos[0]][newPos[1]] = WUMPUS;
       this.map.wumpusPos = newPos;
+      this._setVisitedMap();
       return newPos;
     }
     return [-1, -1];
@@ -226,14 +227,23 @@ class Wumpus extends Character {
     bool meetSound = false;
     bool activeWumpus = false;
     bool activeWumpusNear = false;
+    bool meetWumpus = false;
 
     if (this.map.map[this.pos[0]][this.pos[1]] == SOUND) meetSound = true;
     if (this.active) activeWumpus = true;
-    if (this.active && manhattanDist(this.pos, this.player.pos) <= 2)
+    if (this.active && manhattanDist(this.pos, this.player.pos) == 0)
+      meetWumpus = true;
+    else if (this.active && manhattanDist(this.pos, this.player.pos) <= 2)
       activeWumpusNear = true;
     this.flag.reset(
         sound: meetSound,
         activeWumpus: activeWumpus,
-        activeWumpusNear: activeWumpusNear);
+        activeWumpusNear: activeWumpusNear,
+        wumpus: meetWumpus);
+  }
+
+  void _setVisitedMap() {
+    if (pos[0] == player.pos[0] && pos[1] == player.pos[1])
+      this.map.visitedMap[pos[0]][pos[1]].add('Wumpus');
   }
 }

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:wumpus_world/customwidget.dart';
+import 'package:wumpus_world/gameengine/characters.dart';
 import 'package:wumpus_world/gameengine/map.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
 
@@ -13,8 +14,9 @@ class MapBlock extends StatelessWidget {
   GameMap map;
   void Function(void Function()) update;
   PlayerCell player;
+  Wumpus wumpus;
 
-  MapBlock(this.width, this.map, this.player) {
+  MapBlock(this.width, this.map, this.player, this.wumpus) {
     this.size = map.size;
     this.margin = (width / 7) / size;
     this.widthCell = (width - margin * (size - 1)) / size;
@@ -47,7 +49,7 @@ class MapBlock extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (j = 0; j < size; j++)
-                            MapCell(widthCell, map, i, j)
+                            MapCell(widthCell, map, i, j, wumpus)
                         ],
                       )
                   ],
@@ -68,9 +70,13 @@ class MapCell extends StatelessWidget {
   double imageWidth;
   GameMap map;
   int row, col;
+  Wumpus wumpus;
+  String mode;
 
-  MapCell(this.width, this.map, this.row, this.col) {
+  MapCell(this.width, this.map, this.row, this.col, this.wumpus,
+      {String mode = 'None'}) {
     this.imageWidth = 3 / 4 * width;
+    this.mode = mode;
   }
 
   @override
@@ -104,7 +110,7 @@ class MapCell extends StatelessWidget {
         ));
         curWidth -= width / 6;
       }
-      if (item == 'Stench') {
+      if (item == 'Stench' && (!wumpus.active || mode == 'Show')) {
         stackChildren.add(Container(
           width: curWidth,
           height: curWidth,
@@ -136,7 +142,7 @@ class MapCell extends StatelessWidget {
           item == 'Pit' ||
           item == 'DeadBody' ||
           item == 'WumpusDead' ||
-          item == 'Goal') {
+          ((item == 'Goal' || item == 'Sound') && mode == 'Show')) {
         stackChildren.add(Container(
           width: imageWidth,
           height: imageWidth,
@@ -149,7 +155,13 @@ class MapCell extends StatelessWidget {
     }
     return Stack(
       alignment: Alignment.center,
-      children: stackChildren,
+      children: (mode != 'NotShow')
+          ? stackChildren
+          : [
+              SizedBox(
+                width: width,
+              )
+            ],
     );
   }
 }
