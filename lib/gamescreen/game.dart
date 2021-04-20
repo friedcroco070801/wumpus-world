@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:wumpus_world/customwidget.dart';
+import 'package:wumpus_world/data/gamedata.dart';
 import 'package:wumpus_world/gameengine/characters.dart';
 import 'package:wumpus_world/gameengine/flag.dart';
 import 'package:wumpus_world/gameengine/map.dart';
@@ -32,6 +33,11 @@ class Game {
       mapBlock.update(() {});
       showWinDialog(context);
       actionButton.update(() {});
+      if (GameData.level == GameData.maxLevel) {
+        GameData.maxLevel += 1;
+        GameData.level = GameData.maxLevel;
+        GameData.levelBar(() {});
+      }
       return 1;
     }
     if (gameMap.map[player.pos[0]][player.pos[1]] == WUMPUS) {
@@ -114,9 +120,12 @@ class Game {
     print('Arrow shot!');
   }
 
-  Game() {
+  Game(int size, int numOfDeads, int numOfPits, int numSounds) {
     gameMap = GameMap.randommap(
-        size: 7, numOfDeads: 2, numOfPits: 20, numOfSounds: 2);
+        size: size,
+        numOfDeads: numOfDeads,
+        numOfPits: numOfPits,
+        numOfSounds: numSounds);
     flag = Flag();
     player = Player(pos: [0, 0], map: gameMap, flag: flag);
     wumpus = Wumpus(
