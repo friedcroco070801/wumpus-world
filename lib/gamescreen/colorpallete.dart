@@ -9,7 +9,9 @@ class GameColor {
   static final Color YELLOW = Color.fromRGBO(0xFF, 0xCA, 0x3A, 1);
   //static final Color RED = Color.fromRGBO(0xFF, 0x59, 0x5E, 1);
   static final Color RED = Color.fromRGBO(237, 28, 36, 1);
-  static final Color ONYX = Color.fromRGBO(0x31, 0x36, 0x38, 1);
-  static final Color GRAY = Color.fromRGBO(0x9B, 0x9B, 0x7A, 1);
+  static final Color BROWN = Color.fromRGBO(185, 122, 87, 1);
+  //static final Color ONYX = Color.fromRGBO(0x31, 0x36, 0x38, 1);
+  static final Color ONYX = Color.fromRGBO(10, 10, 10, 1);
+  static final Color GRAY = Color.fromRGBO(0x31, 0x36, 0x38, 1);
   static final Color VIOLET = Color.fromRGBO(0x6A, 0x4C, 0x93, 1);
 }

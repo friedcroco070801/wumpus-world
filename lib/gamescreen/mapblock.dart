@@ -97,7 +97,8 @@ class MapCell extends StatelessWidget {
           width: curWidth,
           height: curWidth,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(width / 6),
+            //borderRadius: BorderRadius.circular(width / 6),
+            shape: BoxShape.circle,
             color: GameColor.GREEN,
           ),
         ));
@@ -106,7 +107,8 @@ class MapCell extends StatelessWidget {
           width: curWidth,
           height: curWidth,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(width / 6),
+            //borderRadius: BorderRadius.circular(width / 6),
+            shape: BoxShape.circle,
             color: Colors.black,
           ),
         ));
@@ -120,7 +122,8 @@ class MapCell extends StatelessWidget {
           width: curWidth,
           height: curWidth,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(width / 6),
+            //borderRadius: BorderRadius.circular(width / 6),
+            shape: BoxShape.circle,
             color: GameColor.VIOLET,
           ),
         ));
@@ -129,7 +132,8 @@ class MapCell extends StatelessWidget {
           width: curWidth,
           height: curWidth,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(width / 6),
+            //borderRadius: BorderRadius.circular(width / 6),
+            shape: BoxShape.circle,
             color: Colors.black,
           ),
         ));
@@ -143,6 +147,17 @@ class MapCell extends StatelessWidget {
         ));
         curWidth -= width / 6;
       }
+
+      if (row == 0 && col == 0)
+        stackChildren.add(Container(
+          width: imageWidth,
+          height: imageWidth,
+          child: Image.asset(
+            'assets/images/Door.png',
+            fit: BoxFit.contain,
+          ),
+        ));
+
       if (item == 'Wumpus' ||
           item == 'Pit' ||
           item == 'DeadBody' ||

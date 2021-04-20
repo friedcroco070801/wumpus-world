@@ -7,6 +7,8 @@ import 'package:wumpus_world/gamescreen/game.dart';
 import 'package:wumpus_world/gamescreen/mapblock.dart';
 import 'package:wumpus_world/gamescreen/notifybox.dart';
 
+final int SIZEMARGIN = 40;
+
 class GameScreen extends StatelessWidget {
   AnimatedText animatedText;
   DirectionController directionController;
@@ -20,8 +22,6 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Game.context = context;
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     return OrientationBuilder(builder: (_, orientation) {
       if (orientation == Orientation.portrait)
         return _portraitGameScreen(context);
@@ -90,18 +90,39 @@ class GameScreen extends StatelessWidget {
           Row(
             children: [
               Container(
-                margin: EdgeInsets.all(height / 40),
-                child: () {
-                  this.mapBlock.setParameters(height - height / 20);
-                  return this.mapBlock;
-                }(),
+                width: height,
+                height: height,
+                color: Colors.black,
+                child: Stack(
+                  children: [
+                    Container(
+                      width: height,
+                      height: height,
+                      color: GameColor.BROWN,
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(height / SIZEMARGIN),
+                      color: Colors.black,
+                      child: () {
+                        this
+                            .mapBlock
+                            .setParameters(height - height * 2 / SIZEMARGIN);
+                        return this.mapBlock;
+                      }(),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: height / 40,
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  NotifyBox(widthBox, heightBox, height / 40, animatedText,
-                      'landscape'),
-                  Controller(widthBox, heightBox, height / 40, 'landscape',
-                      directionController, actionButton)
+                  NotifyBox(widthBox - height / 40, heightBox, height / 40,
+                      animatedText, 'landscape'),
+                  Controller(widthBox - height / 40, heightBox, height / 40,
+                      'landscape', directionController, actionButton)
                 ],
               )
             ],

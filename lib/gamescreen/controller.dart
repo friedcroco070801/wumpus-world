@@ -127,17 +127,23 @@ class DirectionController extends StatelessWidget {
                           width: boxSize,
                           height: boxSize,
                           color: Colors.black,
-                          child: Icon(
-                            Icons.arrow_drop_up,
-                            color: Colors.white,
+                          child: Image.asset(
+                            'assets/images/Buttonu.png',
+                            fit: BoxFit.contain,
                           ),
                         ),
                         onTap: () {
                           move('u');
                         },
                       )
-                    : SizedBox(
+                    : Container(
                         width: boxSize,
+                        height: boxSize,
+                        color: Colors.black,
+                        child: Image.asset(
+                          'assets/images/ButtonuDisable.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                 SizedBox(width: boxSize + margin),
               ],
@@ -153,9 +159,9 @@ class DirectionController extends StatelessWidget {
                           width: boxSize,
                           height: boxSize,
                           color: Colors.black,
-                          child: Icon(
-                            Icons.arrow_left,
-                            color: Colors.white,
+                          child: Image.asset(
+                            'assets/images/Buttonl.png',
+                            fit: BoxFit.contain,
                           ),
                         ),
                         onTap: () {
@@ -164,6 +170,12 @@ class DirectionController extends StatelessWidget {
                       )
                     : Container(
                         width: boxSize,
+                        height: boxSize,
+                        color: Colors.black,
+                        child: Image.asset(
+                          'assets/images/ButtonlDisable.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                 SizedBox(
                   width: this.margin,
@@ -186,17 +198,23 @@ class DirectionController extends StatelessWidget {
                           width: boxSize,
                           height: boxSize,
                           color: Colors.black,
-                          child: Icon(
-                            Icons.arrow_right,
-                            color: Colors.white,
+                          child: Image.asset(
+                            'assets/images/Buttonr.png',
+                            fit: BoxFit.contain,
                           ),
                         ),
                         onTap: () {
                           move('r');
                         },
                       )
-                    : SizedBox(
+                    : Container(
                         width: boxSize,
+                        height: boxSize,
+                        color: Colors.black,
+                        child: Image.asset(
+                          'assets/images/ButtonrDisable.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
               ],
             ),
@@ -215,17 +233,23 @@ class DirectionController extends StatelessWidget {
                           width: boxSize,
                           height: boxSize,
                           color: Colors.black,
-                          child: Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.white,
+                          child: Image.asset(
+                            'assets/images/Buttond.png',
+                            fit: BoxFit.contain,
                           ),
                         ),
                         onTap: () {
                           move('d');
                         },
                       )
-                    : SizedBox(
+                    : Container(
                         width: boxSize,
+                        height: boxSize,
+                        color: Colors.black,
+                        child: Image.asset(
+                          'assets/images/ButtondDisable.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                 SizedBox(width: boxSize + margin),
               ],
@@ -360,9 +384,9 @@ class ActionButton extends StatelessWidget {
         width: buttonSize,
         height: buttonSize,
         decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black),
-        child: Icon(
-          Icons.keyboard_return,
-          color: Colors.white,
+        child: Image.asset(
+          'assets/images/ButtonReturn.png',
+          fit: BoxFit.contain,
         ),
       ),
     );
@@ -374,9 +398,9 @@ class ActionButton extends StatelessWidget {
         width: buttonSize,
         height: buttonSize,
         decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black),
-        child: Icon(
-          Icons.location_searching_outlined,
-          color: Colors.white,
+        child: Image.asset(
+          'assets/images/ButtonArrow.png',
+          fit: BoxFit.contain,
         ),
       ),
     );
@@ -394,7 +418,16 @@ class ActionButton extends StatelessWidget {
                 ),
                 player.active && player.arrow
                     ? arrowButton
-                    : SizedBox(width: buttonSize, height: buttonSize)
+                    : Container(
+                        width: buttonSize,
+                        height: buttonSize,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.black),
+                        child: Image.asset(
+                          'assets/images/ButtonArrowDisable.png',
+                          fit: BoxFit.contain,
+                        ),
+                      )
               ],
             );
           else
@@ -408,7 +441,16 @@ class ActionButton extends StatelessWidget {
                 ),
                 player.active && player.arrow
                     ? arrowButton
-                    : SizedBox(width: buttonSize, height: buttonSize)
+                    : Container(
+                        width: buttonSize,
+                        height: buttonSize,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.black),
+                        child: Image.asset(
+                          'assets/images/ButtonArrowDisable.png',
+                          fit: BoxFit.contain,
+                        ),
+                      )
               ],
             );
         },

@@ -116,7 +116,7 @@ class Game {
 
   Game() {
     gameMap = GameMap.randommap(
-        size: 4, numOfDeads: 2, numOfPits: 20, numOfSounds: 2);
+        size: 7, numOfDeads: 2, numOfPits: 20, numOfSounds: 2);
     flag = Flag();
     player = Player(pos: [0, 0], map: gameMap, flag: flag);
     wumpus = Wumpus(
