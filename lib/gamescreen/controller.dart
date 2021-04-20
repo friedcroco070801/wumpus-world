@@ -259,7 +259,7 @@ class ActionButton extends StatelessWidget {
       child: Text("OK"),
       onPressed: () {
         Navigator.of(context).pop();
-        //Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 
@@ -351,7 +351,10 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     GestureDetector backButton = GestureDetector(
       onTap: () {
-        showReturnDialog(context);
+        if (!player.win && !player.lose)
+          showReturnDialog(context);
+        else
+          Navigator.of(context).pop();
       },
       child: Container(
         width: buttonSize,

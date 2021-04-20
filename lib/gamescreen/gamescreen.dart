@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:wumpus_world/gameengine/map.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
 import 'package:wumpus_world/gamescreen/controller.dart';
+import 'package:wumpus_world/gamescreen/game.dart';
 import 'package:wumpus_world/gamescreen/mapblock.dart';
 import 'package:wumpus_world/gamescreen/notifybox.dart';
 
@@ -18,6 +19,7 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Game.context = context;
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     return OrientationBuilder(builder: (_, orientation) {

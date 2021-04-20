@@ -34,12 +34,14 @@ class Player extends Character {
   bool carryGoal;
   bool arrow;
   Wumpus wumpus;
+  bool win;
 
   Player({List<int> pos, GameMap map, Flag flag}) {
     this.pos = pos;
     this.map = map;
     this.active = true;
     this.lose = false;
+    this.win = false;
     this.carryGoal = false;
     this.flag = flag;
     this.arrow = true;
@@ -183,6 +185,17 @@ class Player extends Character {
       if (this.flag.meetSound) this.map.visitedMap[pos[0]][pos[1]].add('Sound');
       if (this.flag.meetGoal) this.map.visitedMap[pos[0]][pos[1]].add('Goal');
     }
+  }
+
+  void visitAllMap() {
+    List<int> oldPos = pos;
+    for (int i = 0; i < map.size; i++)
+      for (int j = 0; j < map.size; j++) {
+        pos = [i, j];
+        this._triggerEventOnMove();
+        this._setVisitedMap();
+      }
+    pos = oldPos;
   }
 }
 

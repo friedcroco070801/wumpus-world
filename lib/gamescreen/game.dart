@@ -10,6 +10,7 @@ import 'package:wumpus_world/gamescreen/controller.dart';
 import 'package:wumpus_world/gamescreen/gamescreen.dart';
 import 'package:wumpus_world/gamescreen/mapblock.dart';
 import 'package:wumpus_world/gamescreen/notifybox.dart';
+import 'package:wumpus_world/gamescreen/winlosealert.dart';
 
 class Game {
   GameMap gameMap;
@@ -22,7 +23,36 @@ class Game {
   MapBlock mapBlock;
   PlayerCell playerCell;
   GameScreen gameScreen;
-  BuildContext context;
+  static BuildContext context;
+
+  Future<int> checkWinLose() async {
+    if (player.pos[0] == 0 && player.pos[1] == 0 && player.carryGoal) {
+      player.win = true;
+      player.visitAllMap();
+      mapBlock.update(() {});
+      showWinDialog(context);
+      actionButton.update(() {});
+      return 1;
+    }
+    if (gameMap.map[player.pos[0]][player.pos[1]] == WUMPUS) {
+      player.lose = true;
+      player.visitAllMap();
+      playerCell.vanish();
+      mapBlock.update(() {});
+      await showLoseWumpusDialog(context);
+      actionButton.update(() {});
+      return -1;
+    }
+    if (gameMap.map[player.pos[0]][player.pos[1]] == PIT) {
+      player.lose = true;
+      player.visitAllMap();
+      mapBlock.update(() {});
+      showLosePitDialog(context);
+      actionButton.update(() {});
+      return -2;
+    }
+    return 0;
+  }
 
   Future<void> playerMove(String dir) async {
     player.move(dir: dir);
@@ -37,9 +67,12 @@ class Game {
     directionController.update(() {});
     actionButton.update(() {});
 
+    if (gameMap.map[player.pos[0]][player.pos[1]] == PIT) playerCell.vanish();
     animatedText.animateUntil(fulltext: flag.getSituationPlayer());
     await Future.delayed(
         Duration(milliseconds: 20 * flag.getSituationPlayer().length));
+
+    if (await checkWinLose() != 0) return;
 
     if (wumpus.active) {
       await Future.delayed(Duration(milliseconds: 1500));
@@ -47,6 +80,7 @@ class Game {
       animatedText.animateUntil(fulltext: flag.getSituationWumpus());
       await Future.delayed(
           Duration(milliseconds: 20 * flag.getSituationWumpus().length));
+      if (await checkWinLose() != 0) return;
     }
 
     player.active = true;
@@ -82,7 +116,7 @@ class Game {
 
   Game() {
     gameMap = GameMap.randommap(
-        size: 10, numOfDeads: 2, numOfPits: 20, numOfSounds: 4);
+        size: 4, numOfDeads: 2, numOfPits: 20, numOfSounds: 2);
     flag = Flag();
     player = Player(pos: [0, 0], map: gameMap, flag: flag);
     wumpus = Wumpus(

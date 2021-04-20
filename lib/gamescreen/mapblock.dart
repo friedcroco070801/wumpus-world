@@ -71,10 +71,12 @@ class MapCell extends StatelessWidget {
   GameMap map;
   int row, col;
   Wumpus wumpus;
+  Player player;
   String mode;
 
   MapCell(this.width, this.map, this.row, this.col, this.wumpus,
       {String mode = 'None'}) {
+    this.player = wumpus.player;
     this.imageWidth = 3 / 4 * width;
     this.mode = mode;
   }
@@ -90,7 +92,7 @@ class MapCell extends StatelessWidget {
     ));
 
     for (String item in this.map.visitedMap[row][col]) {
-      if (item == 'Breeze') {
+      if (item == 'Breeze' && !player.win && !player.lose) {
         stackChildren.add(Container(
           width: curWidth,
           height: curWidth,
@@ -110,7 +112,10 @@ class MapCell extends StatelessWidget {
         ));
         curWidth -= width / 6;
       }
-      if (item == 'Stench' && (!wumpus.active || mode == 'Show')) {
+      if (item == 'Stench' &&
+          (!wumpus.active || mode == 'Show') &&
+          !player.win &&
+          !player.lose) {
         stackChildren.add(Container(
           width: curWidth,
           height: curWidth,
@@ -142,7 +147,8 @@ class MapCell extends StatelessWidget {
           item == 'Pit' ||
           item == 'DeadBody' ||
           item == 'WumpusDead' ||
-          ((item == 'Goal' || item == 'Sound') && mode == 'Show')) {
+          ((item == 'Goal' || item == 'Sound') &&
+              (mode == 'Show' || player.win || player.lose))) {
         stackChildren.add(Container(
           width: imageWidth,
           height: imageWidth,

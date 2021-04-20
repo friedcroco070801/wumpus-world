@@ -39,6 +39,7 @@ class Flag {
     this.meetGoal = goal;
     this.meetStartToMove = startMove;
     this.meetHitNothing = hitNothing;
+    this.meetHitSomething = hitSomething;
     this.activeWumpus = activeWumpus;
     this.activeWumpusNear = activeWumpusNear;
   }
@@ -50,7 +51,7 @@ class Flag {
     }
 
     if (this.meetPit) {
-      return 'Aaaargh!!!';
+      return 'Aaaaaaaaaaaaaaaaaaaargh!!!';
     }
 
     if (this.meetWumpusDead) {
@@ -127,7 +128,7 @@ class Flag {
 
     if (this.meetWumpus) {
       if (res != '') res = res + '\n';
-      res = res + 'I-I have never see any monsters this huge!';
+      res = res + 'N-nooo! It\'s coming!';
     }
 
     return res;
