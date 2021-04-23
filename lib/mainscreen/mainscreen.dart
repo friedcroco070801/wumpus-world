@@ -5,6 +5,7 @@ import 'package:wumpus_world/data/gamedata.dart';
 import 'package:wumpus_world/gamescreen/colorpallete.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:wumpus_world/gamescreen/game.dart';
+import 'package:wumpus_world/mainscreen/tutorial.dart';
 
 class MainScreen extends StatelessWidget {
   double textHeight;
@@ -32,7 +33,7 @@ class MainScreen extends StatelessWidget {
             height: MediaQuery.of(context).padding.top,
           ),
           Container(
-            height: textHeight,
+            height: textHeight * 9 / 10,
             width: MediaQuery.of(context).size.width,
             alignment: Alignment.center,
             child: Material(
@@ -42,7 +43,26 @@ class MainScreen extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: GameColor.RED,
-                    fontSize: MediaQuery.of(context).size.width / 8,
+                    fontSize: MediaQuery.of(context).size.width / 9,
+                    fontFamily: 'RainyHearts'),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          // SizedBox(
+          //   height: textHeight * 1 / 10,
+          // ),
+          Container(
+            height: textHeight * 1 / 10,
+            width: MediaQuery.of(context).size.width,
+            alignment: Alignment.center,
+            child: Material(
+              type: MaterialType.transparency,
+              child: Text(
+                'created by friedcroco070801',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: MediaQuery.of(context).size.width / 48,
                     fontFamily: 'RainyHearts'),
                 textAlign: TextAlign.center,
               ),
@@ -51,7 +71,7 @@ class MainScreen extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: menuWidth,
+                width: menuWidth * 4 / 3,
                 height: menuHeight,
                 alignment: Alignment.center,
                 child: CustomStatefulBuilder(
@@ -69,16 +89,19 @@ class MainScreen extends StatelessWidget {
                                 GameData.level >= GameData.levelData.length
                                     ? GameData.levelData.length - 1
                                     : GameData.level - 1];
-                            Game game =
-                                Game(para[0], para[1], para[2], para[3]);
+                            Game game = Game(
+                                para[0], para[1], para[2], para[3], context);
                             GameData.levelBar = setState;
-                            setState(() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => game.gameScreen),
-                              );
-                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => game.gameScreen),
+                            );
+                            if (GameData.tutorialData(GameData.level).length >
+                                    0 &&
+                                GameData.level == GameData.maxLevel)
+                              Tutorial(context)
+                                  .showTutorialDialog(GameData.level);
                           },
                           child: Container(
                             width: menuWidth / 3,
@@ -88,7 +111,7 @@ class MainScreen extends StatelessWidget {
                             child: Material(
                               type: MaterialType.transparency,
                               child: Text(
-                                'DivE IntO',
+                                'Dive into',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: menuWidth / 20,
@@ -138,17 +161,28 @@ class MainScreen extends StatelessWidget {
                                 fontFamily: 'RainyHearts'),
                           ),
                         ),
-                      )
+                      ),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: Text(
+                          ' / ${GameData.maxLevel}',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: menuWidth / 20,
+                              fontFamily: 'RainyHearts'),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
               Container(
-                width: menuWidth,
+                width: menuWidth * 2 / 3,
                 height: menuHeight,
                 alignment: Alignment.center,
                 child: Container(
-                  width: menuWidth * 4 / 5,
+                  width: menuWidth * 2 / 3,
                   height: menuHeight * 4 / 5,
                   child: Image.asset(
                     'assets/images/WumpusBlack.png',

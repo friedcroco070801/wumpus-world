@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wumpus_world/customwidget.dart';
 import 'package:wumpus_world/data/gamedata.dart';
 import 'package:wumpus_world/gameengine/characters.dart';
@@ -12,6 +13,7 @@ import 'package:wumpus_world/gamescreen/gamescreen.dart';
 import 'package:wumpus_world/gamescreen/mapblock.dart';
 import 'package:wumpus_world/gamescreen/notifybox.dart';
 import 'package:wumpus_world/gamescreen/winlosealert.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Game {
   GameMap gameMap;
@@ -24,7 +26,7 @@ class Game {
   MapBlock mapBlock;
   PlayerCell playerCell;
   GameScreen gameScreen;
-  static BuildContext context;
+  BuildContext context;
 
   Future<int> checkWinLose() async {
     if (player.pos[0] == 0 && player.pos[1] == 0 && player.carryGoal) {
@@ -36,6 +38,11 @@ class Game {
       if (GameData.level == GameData.maxLevel) {
         GameData.maxLevel += 1;
         GameData.level = GameData.maxLevel;
+        if (!kIsWeb) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setInt('maxLevel', GameData.maxLevel);
+          print('Saved');
+        }
         GameData.levelBar(() {});
       }
       return 1;
@@ -120,7 +127,9 @@ class Game {
     print('Arrow shot!');
   }
 
-  Game(int size, int numOfDeads, int numOfPits, int numSounds) {
+  Game(int size, int numOfDeads, int numOfPits, int numSounds,
+      BuildContext context) {
+    this.context = context;
     gameMap = GameMap.randommap(
         size: size,
         numOfDeads: numOfDeads,

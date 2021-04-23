@@ -138,7 +138,7 @@ class GameMap {
     PathFinding pathFind =
         PathFinding(map: this, start: [0, 0], end: this.goalPos);
     bool canWin = pathFind.solve();
-    return (canWin && pathFind.path.length >= this.size);
+    return (canWin && pathFind.path.length >= this.size * 4 / 3);
   }
 
   static List<List<int>> generateMap(

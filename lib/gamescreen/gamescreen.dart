@@ -21,7 +21,6 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Game.context = context;
     return OrientationBuilder(builder: (_, orientation) {
       if (orientation == Orientation.portrait)
         return _portraitGameScreen(context);
