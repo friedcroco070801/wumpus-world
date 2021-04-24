@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="wumpus.world.wumpus_world">
    <application
-        android:label="wumpus_world"
+        android:label="Wumpus World"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -51,12 +51,6 @@ flutter:
     - assets/images/
 
   fonts:
-    - family: YumenoMori
-      fonts:
-        - asset: assets/fonts/yumenomori.ttf
-    - family: RetroGaming
-      fonts:
-        - asset: assets/fonts/retrogaming.ttf
     - family: RainyHearts
       fonts:
         - asset: assets/fonts/rainyhearts.ttf
