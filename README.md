@@ -23,7 +23,7 @@ The application is designed to be used on Android devices with Android version 4
 
 # Installing:
 ## For Android
-- *Step 1*: Download "wumpus-1.0.0.apk" file in folder \release\android.
+- *Step 1*: Download "wumpus-1.0.0.apk" file in folder \release.
 - *Step 2*: Install the app. Make sure that your device allows applications from outside the Google Play Store to be installed.
 - *Step 3*: Enjoy the game!
 ## Play directly on web
