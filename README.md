@@ -27,10 +27,7 @@ The application is designed to be used on Android devices with Android version 4
 - *Step 2*: Install the app. Make sure that your device allows applications from outside the Google Play Store to be installed.
 - *Step 3*: Enjoy the game!
 ## Play directly on web
-Not wanna wasting time? A webapp is for you:
-<p align="center">
-<iframe src="release/web/index.html" width="720" height="405"></iframe>
-</p>
+Not wanna wasting time? A webapp is for you: [Play online (work only in landscape mode)](http://wumpusworldweb.surge.sh/)
 
 # Technology used:
 [Dart](https://dart.dev/)/[Flutter](https://flutter.dev/)

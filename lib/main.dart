@@ -19,7 +19,8 @@ void main() {
         GameData.maxLevel = 1;
         print(GameData.maxLevel);
       }
-    }
+    } else
+      GameData.maxLevel = 1;
     GameData.level = GameData.maxLevel;
   }();
 
