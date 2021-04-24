@@ -4,12 +4,6 @@ Wumpus World is an android horror game by friedcroco070801, inspired by the old 
 # System requirement:
 The application is designed to be used on Android devices with Android version 4.1 and newer.
 
-# Installing:
-## For Android
-- *Step 1*: Download "wumpus-1.0.0.apk" file in folder \release.
-- *Step 2*: Install the app. Make sure that your device allows applications from outside the Google Play Store to be installed.
-- *Step 3*: Enjoy the game!
-
 # Some screenshots:
 <p align="center">
 <img src="screenshot/screen1.png" width="480" height="270">
@@ -25,6 +19,17 @@ The application is designed to be used on Android devices with Android version 4
 </p>
 <p align="center">
 <img src="screenshot/screen5.png" width="480" height="270">
+</p>
+
+# Installing:
+## For Android
+- *Step 1*: Download "wumpus-1.0.0.apk" file in folder \release\android.
+- *Step 2*: Install the app. Make sure that your device allows applications from outside the Google Play Store to be installed.
+- *Step 3*: Enjoy the game!
+## Play directly on web
+Not wanna wasting time? A webapp is for you:
+<p align="center">
+<iframe src="release/web/index.html" width="720" height="405"></iframe>
 </p>
 
 # Technology used:
