@@ -12,19 +12,19 @@ The application is designed to be used on Android devices with Android version 4
 
 # Some screenshots:
 <p align="center">
-<img src="screenshot/screenshot1.png" width="480" height="270">
+<img src="screenshot/screen1.png" width="480" height="270">
 </p>
 <p align="center">
-<img src="screenshot/screenshot2.png" width="480" height="270">
+<img src="screenshot/screen2.png" width="480" height="270">
 </p>
 <p align="center">
-<img src="screenshot/screenshot3.png" width="480" height="270">
+<img src="screenshot/screen3.png" width="480" height="270">
 </p>
 <p align="center">
-<img src="screenshot/screenshot4.png" width="480" height="270">
+<img src="screenshot/screen4.png" width="480" height="270">
 </p>
 <p align="center">
-<img src="screenshot/screenshot5.png" width="480" height="270">
+<img src="screenshot/screen5.png" width="480" height="270">
 </p>
 
 # Technology used:
